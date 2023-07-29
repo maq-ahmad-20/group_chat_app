@@ -1,7 +1,7 @@
 
-const express = require('express');
 
-const User = require('../model/user');
+
+const User = require('../models/userModel')
 
 const bcrypt = require('bcrypt')
 
