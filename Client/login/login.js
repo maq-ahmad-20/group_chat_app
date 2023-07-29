@@ -60,7 +60,8 @@ document.getElementById('login-user-button').addEventListener('click', async (e)
                 document.querySelector('#email').value = "";
 
                 document.querySelector('#password').value = "";
-
+                alert("successfullyLogedin")
+                window.location.reload()
             }
 
 

@@ -4,6 +4,7 @@ const fs = require('fs')
 const cors = require('cors');
 const UserModel = require('./models/userModel')
 const userSignUpRouter = require('./routers/usersignup')
+const loginRouter = require('./routers/login')
 
 require('dotenv').config()
 
@@ -20,6 +21,7 @@ app.use(cors({
 app.use(express.json())
 
 app.use('/user', userSignUpRouter)
+app.use(loginRouter)
 
 const PORT = process.env.PORT || 9000
 sequelize.sync({ alter: true }).then((result) => {
