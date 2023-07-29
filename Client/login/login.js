@@ -61,7 +61,7 @@ document.getElementById('login-user-button').addEventListener('click', async (e)
 
                 document.querySelector('#password').value = "";
                 alert("successfullyLogedin")
-                window.location.reload()
+                window.location.href = "../chat/chat.html"
             }
 
 
