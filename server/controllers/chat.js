@@ -3,6 +3,8 @@
 const Chat = require('../models/chatModel');
 const User = require('../models/userModel')
 
+const { Sequelize, Op } = require('sequelize')
+
 exports.postUserMessageToDB = async (req, res, next) => {
 
     try {
@@ -28,12 +30,18 @@ exports.postUserMessageToDB = async (req, res, next) => {
 exports.getAllMessages = async (req, res, next) => {
 
     try {
-        let userMessages = await Chat.findAll()
+        const latestId = +req.params.latestId
+        console.log(latestId)
+        let userMessages = await Chat.findAll({ where: { id: { [Op.gt]: latestId } } })
+
+        console.log(userMessages)
 
         return res.status(200).json({ messages: userMessages })
 
 
     } catch (err) {
+        console.log(err)
         return res.status(500).json({ message: "error" })
     }
 }
+
