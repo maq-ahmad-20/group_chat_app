@@ -2,7 +2,7 @@
 
 const Chat = require('../models/chatModel');
 const User = require('../models/userModel')
-
+const chatGroups = require('../models/chatGroup')
 const { Sequelize, Op } = require('sequelize')
 
 exports.postUserMessageToDB = async (req, res, next) => {
@@ -12,11 +12,14 @@ exports.postUserMessageToDB = async (req, res, next) => {
         console.log(req.user)
         console.log(req.body)
         //const userId = req.user.id
+        const groupname = req.body.groupname.toString()
+        let chatGroup = await chatGroups.findOne({ where: { groupname: groupname } })
 
         let postedMessage = await Chat.create({
             username: req.user.username,
             usermessage: req.body.message,
-            userId: req.user.id // foreignkey
+            userId: req.user.id,// foreignkey
+            chatgroupId: chatGroup.dataValues.id
         })
 
         return res.status(200).json({ message: postedMessage })
@@ -31,8 +34,24 @@ exports.getAllMessages = async (req, res, next) => {
 
     try {
         const latestId = +req.params.latestId
+        const groupname = req.params.groupname.toString()
         console.log(latestId)
-        let userMessages = await Chat.findAll({ where: { id: { [Op.gt]: latestId } } })
+        console.log(groupname)
+
+        let chatGroup = await chatGroups.findOne({ where: { groupname: groupname } })
+
+        let userMessages = await Chat.findAll({
+            where: {
+                [Op.and]: [
+                    {
+                        id: {
+                            [Op.gt]: latestId,
+                        }
+                    },
+                    { chatgroupId: chatGroup.dataValues.id }
+                ]
+            }
+        })
 
         console.log(userMessages)
 

@@ -19,24 +19,51 @@
                 <div class="card chat-app">
                     <div id="plist" class="people-list">
                         <div class="input-group">
+                            <div class="action_menu">
+                                <ul>
+
+                                    <li>
+                                        <button class="btn btn-primary" id="createGroup">CreateGroup</button>
+
+                                    </li>
+                                    <li id="addToGroup">
+                                        <button class="btn btn-primary ">AddToGroup</button>
+
+                                    </li>
+
+
+                                </ul>
+                            </div>
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fa fa-search"></i></span>
+                                <input type="text" class="form-control" placeholder="Search..." />
                             </div>
-                            <input type="text" class="form-control" placeholder="Search..." />
+
                         </div>
-                        <ul class="list-unstyled chat-list mt-2 mb-0">
-                            <li class="clearfix">
-                                <!-- <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar" />
+                        <table>
+                            <thead>
+                                <th>Groups</th>
+                            </thead>
+                            <tbody id="tableGroups">
+
+                            </tbody>
+                        </table>
+                        <ul class="list-unstyled chat-list mt-2 mb-0" id="groups">
+                            <!--<li class="clearfix">
+                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar" />
                                 <div class="about">
                                     <div class="name">Ahmad</div>
                                     <div class="status">
-                                        <i class="fa fa-circle offline"></i> left 7 mins ago
+                                        <i class="fa fa-circle offline"></i>
                                     </div>
-                                </div> -->
-                            </li>
+                                </div>
+                            </li>-->
 
                         </ul>
                     </div>
+
+
+
                     <div class="chat">
                         <div class="chat-header clearfix">
                             <div class="row">
@@ -91,6 +118,7 @@
         </div>
 
         <script src="chat.js"></script>
+        <script src="usergroup.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.3/axios.min.js"></script>
 </body>
 

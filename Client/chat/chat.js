@@ -16,12 +16,15 @@ document.getElementById('sendMessageButton').addEventListener('click', async (e)
             e.preventDefault()
 
             console.log(e.target)
-
+            const groupname = JSON.parse(localStorage.getItem('chatMessages'))[0]
+            if (!groupname) {
+                return alert("Please select group to chat")
+            }
             const enteredMessage = document.getElementById('message').value
             console.log(enteredMessage)
             const token = localStorage.getItem('token')
             console.log(decodeToken(token))
-            let postMessage = await axios.post(`${url}/sendMessage`, { message: enteredMessage }, { headers: { Authorization: token } })
+            let postMessage = await axios.post(`${url}/sendMessage`, { message: enteredMessage, groupname: groupname.groupname }, { headers: { Authorization: token } })
 
             console.log(postMessage.data.message)
             addMessagetoChatScreen(postMessage.data.message, "YOU")
@@ -139,8 +142,15 @@ async function storeMessagesInLocalStorage() {
 
     try {
         let previousLatestMessage;
-        let chatMessages = localStorage.getItem('chatMessages')
-        if (chatMessages) {
+        const groupname = JSON.parse(localStorage.getItem('chatMessages'))[0]
+        console.log(groupname)
+        if (!groupname) {
+            return alert("Please select group to chat")
+        }
+
+        let chatMessages = JSON.parse(localStorage.getItem('chatMessages'))
+
+        if (chatMessages.length > 1) {
             let chatArr = JSON.parse(localStorage.getItem('chatMessages'))
             let length = chatArr.length;
             previousLatestMessage = chatArr[length - 1].id // getting previous latest messgae so we can call from db > this id 
@@ -149,7 +159,7 @@ async function storeMessagesInLocalStorage() {
             previousLatestMessage = 0;
         }
 
-        const totalMessages = await axios.get(`${url}/getAllMessages/${previousLatestMessage}`);
+        const totalMessages = await axios.get(`${url}/getAllMessages/${previousLatestMessage}/${groupname.groupname}`);
         const token = localStorage.getItem("token");
         const decodedToken = decodeToken(token);
         const userid = decodedToken.userid;
@@ -194,6 +204,62 @@ async function storeMessagesInLocalStorage() {
 
 
 //setInterval(() => getAllMessages(), 1000)
+
+// getiing chats
+async function getGroupChatScreen(groupname) {
+    //e.preventDefault()
+    try {
+        console.log(groupname)
+        let previousLatestMessage;
+        let chatMessages = []
+        chatMessages.push({ groupname: groupname })
+        localStorage.setItem('chatMessages', JSON.stringify(chatMessages))
+
+        if (chatMessages.length > 1) {
+            let chatArr = JSON.parse(localStorage.getItem('chatMessages'))
+            let length = chatArr.length;
+            previousLatestMessage = chatArr[length - 1].id // getting previous latest messgae so we can call from db > this id 
+            console.log(previousLatestMessage)
+        } else {
+            previousLatestMessage = 0;
+        }
+        const totalMessages = await axios.get(`${url}/getAllMessages/${previousLatestMessage}/${groupname}`);
+
+
+        const previousChats = JSON.parse(localStorage.getItem('chatMessages'));
+
+        if (!previousChats) {
+            localStorage.setItem('chatMessages', JSON.stringify(totalMessages.data.messages))
+
+        } else { // if  messages present in LS so  push all new messages to array and store agin in LS for next messages
+            totalMessages.data.messages.forEach((message) => {
+                previousChats.push(message)
+            })
+            localStorage.setItem('chatMessages', JSON.stringify(previousChats))
+
+            previousChats.forEach((message) => {
+                // console.log(message.userId)
+                //console.log(userid)
+                if (message.userId === userid) {
+
+                    addMessagetoChatScreen(message, "YOU")
+
+                } else {
+
+                    addMessageToChatScreenLeft(message, message.username)
+
+                }
+            })
+
+
+        }
+
+        console.log(document.getElementById(groupname))
+    } catch (err) {
+        console.log(err)
+    }
+
+}
 
 
 document.addEventListener('DOMContentLoaded', storeMessagesInLocalStorage)
