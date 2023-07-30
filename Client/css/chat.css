@@ -7,6 +7,7 @@ body {
     padding: 0;
     border-radius: 10px;
     box-shadow: 0 1px 8px 0 rgba(59, 59, 59, 0.3);
+
   }
   .card {
     /* background: #fff; */
@@ -17,6 +18,7 @@ body {
     position: relative;
     width: 100%;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 10%);
+
   }
   .chat-app .people-list {
     width: 280px;
@@ -26,12 +28,12 @@ body {
     padding: 20px;
     z-index: 7;
   }
-  /* 424874
-  dcd6f7
-  a6b1e1 */
+
   .chat-app .chat {
     margin-left: 280px;
     border-left: 1px solid #eaeaea;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
   
   .people-list {
@@ -99,15 +101,20 @@ body {
   .chat .chat-history {
     padding: 20px;
     border-bottom: 2px solid #fff;
+    overflow-y: scroll;
+    
   }
   
   .chat .chat-history ul {
     padding: 0;
+   
+   
   }
   
   .chat .chat-history ul li {
     list-style: none;
     margin-bottom: 30px;
+    
   }
   
   .chat .chat-history ul li:last-child {
@@ -221,7 +228,9 @@ body {
     .chat-app .people-list {
       height: 465px;
       width: 100%;
-      overflow-x: auto;
+      overflow-y: auto;
+      overflow-x: hidden;
+   
       background: #fff;
       left: -400px;
       display: none;
@@ -237,28 +246,33 @@ body {
     }
     .chat-app .chat-history {
       height: 300px;
-      overflow-x: auto;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
   }
   
   @media only screen and (min-width: 768px) and (max-width: 992px) {
     .chat-app .chat-list {
       height: 650px;
-      overflow-x: auto;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
     .chat-app .chat-history {
       height: 600px;
-      overflow-x: auto;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
   }
   
-  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 1) {
+  @media only screen and (min-width: 993px) and (max-device-width: 1600px) {
     .chat-app .chat-list {
       height: 480px;
-      overflow-x: auto;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
     .chat-app .chat-history {
       height: calc(100vh - 350px);
-      overflow-x: auto;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
   }
