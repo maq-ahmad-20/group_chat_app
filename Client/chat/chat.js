@@ -56,7 +56,7 @@ function addMessagetoChatScreen(data, sender) {
 </a>
 <div class="chat-about">
     <h6 class="m-b-0">${data.username}</h6>
-
+    <h6 class="m-b-0">Adminofgroup</h6>
 </div>`
 
     document.getElementById('headingAvtar').innerHTML = headingAvtar
@@ -178,10 +178,8 @@ async function storeMessagesInLocalStorage() {
             })
             localStorage.setItem('chatMessages', JSON.stringify(previousChats))
 
-
-            previousChats.forEach((message) => {
-                // console.log(message.userId)
-                //console.log(userid)
+            for (let i = 1; i < previousChats.length; i++) {
+                let message = previousChats[i]
                 if (message.userId === userid) {
 
                     addMessagetoChatScreen(message, "YOU")
@@ -191,7 +189,9 @@ async function storeMessagesInLocalStorage() {
                     addMessageToChatScreenLeft(message, message.username)
 
                 }
-            })
+            }
+
+
         }
 
 
@@ -205,10 +205,16 @@ async function storeMessagesInLocalStorage() {
 
 //setInterval(() => getAllMessages(), 1000)
 
-// getiing chats
+// getiing chats after user clicks on particular chat
 async function getGroupChatScreen(groupname) {
     //e.preventDefault()
     try {
+        document.getElementById('displayAllMembersOfSelectedGroup').innerHTML = ""
+        localStorage.removeItem('chatMessages')
+        const token = localStorage.getItem("token");
+        const decodedToken = decodeToken(token);
+        const userid = decodedToken.userid;
+        document.getElementById('chatBoxMessages').innerHTML = ""
         console.log(groupname)
         let previousLatestMessage;
         let chatMessages = []
@@ -237,9 +243,9 @@ async function getGroupChatScreen(groupname) {
             })
             localStorage.setItem('chatMessages', JSON.stringify(previousChats))
 
-            previousChats.forEach((message) => {
-                // console.log(message.userId)
-                //console.log(userid)
+
+            for (let i = 1; i < previousChats.length; i++) {
+                let message = previousChats[i]
                 if (message.userId === userid) {
 
                     addMessagetoChatScreen(message, "YOU")
@@ -249,7 +255,9 @@ async function getGroupChatScreen(groupname) {
                     addMessageToChatScreenLeft(message, message.username)
 
                 }
-            })
+            }
+
+
 
 
         }
@@ -260,6 +268,8 @@ async function getGroupChatScreen(groupname) {
     }
 
 }
+
+
 
 
 document.addEventListener('DOMContentLoaded', storeMessagesInLocalStorage)

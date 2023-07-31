@@ -23,11 +23,23 @@
                                 <ul>
 
                                     <li>
-                                        <button class="btn btn-primary" id="createGroup">CreateGroup</button>
+                                        <button class="btn btn-primary" id="createGroup"
+                                            style="margin-bottom: 6px;">CreateGroup</button>
 
                                     </li>
-                                    <li id="addToGroup">
-                                        <button class="btn btn-primary ">AddToGroup</button>
+
+                                    <li>
+                                        <button class="btn btn-primary" id="addToExistingGroup"
+                                            style="margin-bottom: 6px;">AddMemberToGroup</button>
+
+                                    </li>
+                                    <li>
+                                        <button class="btn btn-primary" id="deleteGroupMembers"
+                                            style="margin-bottom: 6px;">DeleteMember</button>
+
+                                    </li>
+                                    <li>
+                                        <button class="btn btn-primary" id="ShowGroupMembers">ShowGroupMembers</button>
 
                                     </li>
 
@@ -115,7 +127,24 @@
                     </div>
                 </div>
             </div>
+
         </div>
+        <table class="table table-bordered">
+            <thead class="table-active">
+
+                <th>S.no</th>
+                <th>GroupName</th>
+                <th>MemberName</th>
+                <th>MemberEmail</th>
+                <th>IsAdmin</th>
+                <th>MakeMemberAdmin</th>
+
+            </thead>
+            <tbody id="displayAllMembersOfSelectedGroup">
+
+            </tbody>
+
+        </table>
 
         <script src="chat.js"></script>
         <script src="usergroup.js"></script>
