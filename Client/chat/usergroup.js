@@ -190,12 +190,24 @@ async function showGroupMembers() {
 async function makeMemberAdmin(groupname, userid) {
     try {
 
+
+        // const groupMembers = [];
+        // let userInput;
+        // while (userInput !== "ok") {
+        //     userInput = prompt(
+        //         `Enter the valid email of users you want to make admin and type ok`
+        //     );
+        //     if (userInput !== "ok") {
+        //         groupMembers.push(userInput);
+        //     }
+        // }
+
         console.log(groupname)
-        console.log(userid)
+
         const token = localStorage.getItem('token');
 
         let result = await axios.post(`${chaturl}/makeMemberAdmin`,
-            { groupName: groupname, userId: userid }
+            { groupName: groupname, userid: userid }
             , { headers: { Authorization: token } }
         )
 
@@ -209,7 +221,11 @@ async function makeMemberAdmin(groupname, userid) {
         console.log(err)
     }
 }
-
+function logout() {
+    localStorage.removeItem('token')
+    localStorage.removeItem('chatMessages')
+    window.location.replace("../login/login.html");
+}
 
 showMembersOnScreenBtn.addEventListener('click', showGroupMembers)
 createuserBtn.addEventListener('click', createGroup)

@@ -16,19 +16,22 @@ document.getElementById('sendMessageButton').addEventListener('click', async (e)
             e.preventDefault()
 
             console.log(e.target)
-            const groupname = JSON.parse(localStorage.getItem('chatMessages'))[0]
+            const groupname = JSON.parse(localStorage.getItem('chatMessages'))
+            console.log(groupname)
             if (!groupname) {
-                return alert("Please select group to chat")
+                alert("Please select group or create group to chat")
+                location.reload()
             }
             const enteredMessage = document.getElementById('message').value
             console.log(enteredMessage)
             const token = localStorage.getItem('token')
             console.log(decodeToken(token))
-            let postMessage = await axios.post(`${url}/sendMessage`, { message: enteredMessage, groupname: groupname.groupname }, { headers: { Authorization: token } })
+            let postMessage = await axios.post(`${url}/sendMessage`, { message: enteredMessage, groupname: groupname[0].groupname }, { headers: { Authorization: token } })
 
             console.log(postMessage.data.message)
             addMessagetoChatScreen(postMessage.data.message, "YOU")
             document.getElementById('message').value = ""
+
 
         } catch (err) {
             console.log(err)
@@ -51,15 +54,7 @@ function decodeToken(token) {
 
 function addMessagetoChatScreen(data, sender) {
 
-    let headingAvtar = `  <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
-    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar" />
-</a>
-<div class="chat-about">
-    <h6 class="m-b-0">${data.username}</h6>
-    <h6 class="m-b-0">Adminofgroup</h6>
-</div>`
 
-    document.getElementById('headingAvtar').innerHTML = headingAvtar
 
 
     let messagesUl = document.getElementById('chatBoxMessages')
@@ -138,7 +133,7 @@ async function getAllMessages() {
 
 }
 
-async function storeMessagesInLocalStorage() {
+async function storeMessagesInLocalStorageAndAddMessagesToChat() {
 
     try {
         let previousLatestMessage;
@@ -203,12 +198,24 @@ async function storeMessagesInLocalStorage() {
 
 
 
-//setInterval(() => getAllMessages(), 1000)
+setInterval(() => storeMessagesInLocalStorageAndAddMessagesToChat(), 3000)
 
 // getiing chats after user clicks on particular chat
 async function getGroupChatScreen(groupname) {
     //e.preventDefault()
     try {
+
+        let headingAvtar = `  <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
+        <img src="https://cdn3.vectorstock.com/i/1000x1000/24/27/people-group-avatar-character-vector-12392427.jpg" alt="avatar" />
+    </a>
+    <div class="chat-about">
+        <h6 class="m-b-0">${groupname}</h6>
+        
+    </div>`
+
+        document.getElementById('headingAvtar').innerHTML = headingAvtar
+
+
         document.getElementById('displayAllMembersOfSelectedGroup').innerHTML = ""
         localStorage.removeItem('chatMessages')
         const token = localStorage.getItem("token");
@@ -272,4 +279,4 @@ async function getGroupChatScreen(groupname) {
 
 
 
-document.addEventListener('DOMContentLoaded', storeMessagesInLocalStorage)
+document.addEventListener('DOMContentLoaded', storeMessagesInLocalStorageAndAddMessagesToChat)

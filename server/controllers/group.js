@@ -254,29 +254,41 @@ exports.makeMemberAdmin = async (req, res, next) => {
     try {
 
         const groupname = req.body.groupName.toString();
-        const userid = +req.body.userId
+
+        const userid = +req.body.userid
         const requserId = +req.user.id
 
-        if (userid === requserId) {
-            const updateMember = await UserGroup.update({ isadmin: 1 },
-                {
-                    where: {
-                        [Op.and]: [{
-                            groupname: groupname,
-                            userId: userid,
+        if (groupname) {
+            const adminUsers = await UserGroup.findAll({
+                where: {
+                    [Op.and]: [{ isadmin: 1 }, { groupname: groupname }],
+                },
+            });
+            for (let i = 0; i < adminUsers.length; i++) {
+                let adminUser = adminUsers[i]
+                if (adminUser.userId === requserId) {
+                    const updateMember = await UserGroup.update({ isadmin: 1 },
+                        {
+                            where: {
+                                [Op.and]: [{
+                                    groupname: groupname,
+                                    userId: userid,
 
-                        }]
+                                }]
 
-                    }
+                            }
+                        })
+
+
+
+
+                    return res.status(200).json({ message: "successfully made member admin" })
                 }
-            )
-
-            res.status(200).json({ message: "successfully made member admin" })
-
-        } else {
-
-            res.status(201).json({ message: "only Admin can make other members admin of group" })
+            }
         }
+
+        return res.status(201).json({ message: "only Admin can make other members admin of group" })
+
 
     } catch (err) {
         console.log(err)
